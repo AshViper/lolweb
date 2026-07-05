@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>画像ギャラリー</title>
+<title>ランダム画像ギャラリー</title>
 
 <style>
 
@@ -17,7 +17,7 @@
 
 body{
     background:#222;
-    color:white;
+    color:#fff;
     padding:30px;
 }
 
@@ -27,48 +27,35 @@ h1{
 }
 
 .gallery{
-
     max-width:1000px;
     margin:auto;
-
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:20px;
-
 }
 
 .card{
-
     position:relative;
     overflow:hidden;
     border-radius:12px;
     cursor:pointer;
-
 }
 
 .card img{
-
     width:100%;
     aspect-ratio:1/1;
     object-fit:cover;
-
     display:block;
 
-    transition:.35s;
-
-    filter:grayscale(100%) brightness(0%);
+    filter:brightness(0%);
+    transition:0.35s;
 }
 
 .card:hover img{
-
     transform:scale(1.05);
-
 }
 
-/* ?マーク */
-
 .cover{
-
     position:absolute;
     inset:0;
 
@@ -76,30 +63,22 @@ h1{
     justify-content:center;
     align-items:center;
 
-    font-size:70px;
-    font-weight:bold;
-
-    color:white;
-
     background:rgba(100,100,100,.35);
 
-    transition:.35s;
+    color:white;
+    font-size:72px;
+    font-weight:bold;
 
+    transition:.35s;
 }
 
-/* 公開後 */
-
 .card.revealed img{
-
     filter:none;
-
 }
 
 .card.revealed .cover{
-
     opacity:0;
     pointer-events:none;
-
 }
 
 /* モーダル */
@@ -110,13 +89,12 @@ h1{
     inset:0;
 
     display:none;
-
     justify-content:center;
     align-items:center;
 
     background:rgba(0,0,0,.9);
 
-    z-index:999;
+    z-index:1000;
 
 }
 
@@ -131,12 +109,11 @@ h1{
 .close{
 
     position:absolute;
-
     top:20px;
     right:30px;
 
-    font-size:50px;
     color:white;
+    font-size:50px;
 
     cursor:pointer;
 
@@ -145,9 +122,7 @@ h1{
 @media(max-width:700px){
 
 .gallery{
-
     grid-template-columns:repeat(2,1fr);
-
 }
 
 }
@@ -155,9 +130,7 @@ h1{
 @media(max-width:450px){
 
 .gallery{
-
     grid-template-columns:1fr;
-
 }
 
 }
@@ -165,57 +138,23 @@ h1{
 </style>
 
 </head>
-
 <body>
 
 <h1>画像ギャラリー</h1>
 
 <div class="gallery">
 
-<div class="card">
-<img src="image1.png">
-<div class="cover">?</div>
-</div>
+<div class="card"><img><div class="cover">?</div></div>
+<div class="card"><img><div class="cover">?</div></div>
+<div class="card"><img><div class="cover">?</div></div>
 
-<div class="card">
-<img src="image1.png">
-<div class="cover">?</div>
-</div>
+<div class="card"><img><div class="cover">?</div></div>
+<div class="card"><img><div class="cover">?</div></div>
+<div class="card"><img><div class="cover">?</div></div>
 
-<div class="card">
-<img src="image1.png">
-<div class="cover">?</div>
-</div>
-
-<div class="card">
-<img src="image1.png">
-<div class="cover">?</div>
-</div>
-
-<div class="card">
-<img src="image1.png">
-<div class="cover">?</div>
-</div>
-
-<div class="card">
-<img src="image1.png">
-<div class="cover">?</div>
-</div>
-
-<div class="card">
-<img src="image1.png">
-<div class="cover">?</div>
-</div>
-
-<div class="card">
-<img src="image1.png">
-<div class="cover">?</div>
-</div>
-
-<div class="card">
-<img src="image1.png">
-<div class="cover">?</div>
-</div>
+<div class="card"><img><div class="cover">?</div></div>
+<div class="card"><img><div class="cover">?</div></div>
+<div class="card"><img><div class="cover">?</div></div>
 
 </div>
 
@@ -229,16 +168,33 @@ h1{
 
 <script>
 
+// 使用する画像
+const imageList=[
+    "image1.png",
+    "image2.png"
+];
+
+// モーダル
 const modal=document.getElementById("modal");
 const modalImage=document.getElementById("modalImage");
 
+// ランダム配置
+document.querySelectorAll(".card img").forEach(img=>{
+
+    const random=imageList[Math.floor(Math.random()*imageList.length)];
+
+    img.src=random;
+
+});
+
+// カード処理
 document.querySelectorAll(".card").forEach(card=>{
 
     const img=card.querySelector("img");
 
     card.addEventListener("click",()=>{
 
-        // 初回クリックで公開
+        // まだ公開していない
         if(!card.classList.contains("revealed")){
 
             card.classList.add("revealed");
@@ -246,7 +202,7 @@ document.querySelectorAll(".card").forEach(card=>{
 
         }
 
-        // 2回目以降で拡大表示
+        // 公開済みなら拡大
         modal.style.display="flex";
         modalImage.src=img.src;
 
@@ -254,12 +210,14 @@ document.querySelectorAll(".card").forEach(card=>{
 
 });
 
+// ×ボタン
 document.querySelector(".close").onclick=()=>{
 
     modal.style.display="none";
 
-}
+};
 
+// 背景クリック
 modal.onclick=(e)=>{
 
     if(e.target===modal){
@@ -268,8 +226,9 @@ modal.onclick=(e)=>{
 
     }
 
-}
+};
 
+// ESCキー
 document.addEventListener("keydown",(e)=>{
 
     if(e.key==="Escape"){
