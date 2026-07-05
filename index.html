@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>画像ギャラリー</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -25,60 +27,127 @@ h1{
 }
 
 .gallery{
+
     max-width:1000px;
     margin:auto;
 
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:15px;
+    gap:20px;
+
 }
 
-.gallery img{
+.card{
+
+    position:relative;
+    overflow:hidden;
+    border-radius:12px;
+    cursor:pointer;
+
+}
+
+.card img{
+
     width:100%;
     aspect-ratio:1/1;
     object-fit:cover;
-    cursor:pointer;
-    border-radius:10px;
-    transition:.25s;
-    box-shadow:0 4px 10px rgba(0,0,0,.4);
+
+    display:block;
+
+    transition:.35s;
+
+    filter:grayscale(100%) brightness(35%);
 }
 
-.gallery img:hover{
+.card:hover img{
+
     transform:scale(1.05);
+
+}
+
+/* ?マーク */
+
+.cover{
+
+    position:absolute;
+    inset:0;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:70px;
+    font-weight:bold;
+
+    color:white;
+
+    background:rgba(100,100,100,.35);
+
+    transition:.35s;
+
+}
+
+/* 公開後 */
+
+.card.revealed img{
+
+    filter:none;
+
+}
+
+.card.revealed .cover{
+
+    opacity:0;
+    pointer-events:none;
+
 }
 
 /* モーダル */
 
 .modal{
-    display:none;
+
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,.9);
+
+    display:none;
+
     justify-content:center;
     align-items:center;
+
+    background:rgba(0,0,0,.9);
+
     z-index:999;
+
 }
 
 .modal img{
+
     max-width:90%;
     max-height:90%;
-    border-radius:10px;
+    border-radius:12px;
+
 }
 
 .close{
+
     position:absolute;
+
     top:20px;
     right:30px;
-    font-size:45px;
+
+    font-size:50px;
     color:white;
+
     cursor:pointer;
-    user-select:none;
+
 }
 
 @media(max-width:700px){
 
 .gallery{
+
     grid-template-columns:repeat(2,1fr);
+
 }
 
 }
@@ -86,34 +155,76 @@ h1{
 @media(max-width:450px){
 
 .gallery{
+
     grid-template-columns:1fr;
+
 }
 
 }
+
 </style>
 
 </head>
+
 <body>
 
 <h1>画像ギャラリー</h1>
 
 <div class="gallery">
 
-<img src="image1.png" alt="">
-<img src="image1.png" alt="">
-<img src="image1.png" alt="">
-<img src="image1.png" alt="">
-<img src="image1.png" alt="">
-<img src="image1.png" alt="">
-<img src="image1.png" alt="">
-<img src="image1.png" alt="">
-<img src="image1.png" alt="">
+<div class="card">
+<img src="image1.png">
+<div class="cover">?</div>
+</div>
+
+<div class="card">
+<img src="image2.png">
+<div class="cover">?</div>
+</div>
+
+<div class="card">
+<img src="image3.png">
+<div class="cover">?</div>
+</div>
+
+<div class="card">
+<img src="image4.png">
+<div class="cover">?</div>
+</div>
+
+<div class="card">
+<img src="image5.png">
+<div class="cover">?</div>
+</div>
+
+<div class="card">
+<img src="image6.png">
+<div class="cover">?</div>
+</div>
+
+<div class="card">
+<img src="image7.png">
+<div class="cover">?</div>
+</div>
+
+<div class="card">
+<img src="image8.png">
+<div class="cover">?</div>
+</div>
+
+<div class="card">
+<img src="image9.png">
+<div class="cover">?</div>
+</div>
 
 </div>
 
 <div class="modal" id="modal">
-    <span class="close">&times;</span>
-    <img id="modalImage">
+
+<span class="close">&times;</span>
+
+<img id="modalImage">
+
 </div>
 
 <script>
@@ -121,10 +232,21 @@ h1{
 const modal=document.getElementById("modal");
 const modalImage=document.getElementById("modalImage");
 
-document.querySelectorAll(".gallery img").forEach(img=>{
+document.querySelectorAll(".card").forEach(card=>{
 
-    img.addEventListener("click",()=>{
+    const img=card.querySelector("img");
 
+    card.addEventListener("click",()=>{
+
+        // 初回クリックで公開
+        if(!card.classList.contains("revealed")){
+
+            card.classList.add("revealed");
+            return;
+
+        }
+
+        // 2回目以降で拡大表示
         modal.style.display="flex";
         modalImage.src=img.src;
 
